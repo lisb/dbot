@@ -1,0 +1,107 @@
+const { OllamaWrapper } = require("./ollama_wrapper");
+
+const instruction = `
+貴方はビジネスチャットアプリのbotです。チャットシステムはマークダウン記法には対応していないので、リッチテキスト形式は使用しません。
+`;
+
+const defaultSystemMessage = [
+  {
+    role: "system",
+    content: instruction,
+  },
+];
+
+const actionStampInstruction = `
+与えられた要求に合わせて指定されたjson形式のメッセージを返す。必要に応じて締め切る
+
+# Yes/No スタンプ(YesかNoかを選ぶ)
+{
+  "question": '質問内容',
+  // (Option) 誰かが回答:0, 全員が回答:1
+  "closing_type": 1  
+}
+※ Yes/No スタンプの closing_type のデフォルト値は 1 です
+
+送信したYes/Noスタンプは締め切ることができます。
+
+{
+  "close_yesno": sent.message.id
+}
+※ sent.message.id については「メッセージの送信完了」を参照してください。
+
+# セレクトスタンプ(指定された選択肢を選ぶ)
+{
+  "question": '質問内容',
+  "options": ['選択肢1', '選択肢2', '選択肢3'],
+  // (Option) 誰かが回答:0, 全員が回答:1
+  "closing_type": 1
+}
+※ セレクトスタンプの closing_type のデフォルト値は 1 です
+
+送信したセレクトスタンプは締め切ることができます。
+
+{
+  "close_select": sent.message.id
+}
+※ sent.message.id については「メッセージの送信完了」を参照してください。
+
+# タスクスタンプ(やったかどうかを答える)
+{
+  "title": 'すること',
+  // (Option) 誰かが回答:0, 全員が回答:1
+  "closing_type": 0
+}
+※ タスクスタンプの closing_type のデフォルト値は 1 です
+
+送信したタスクスタンプは締め切ることができます。
+
+{
+  "close_task": sent.message.id
+}
+※ sent.message.id については「メッセージの送信完了」を参照してください。
+`;
+
+const actionstampSystemMsg = [
+  {
+    role: "system",
+    content: actionStampInstruction,
+  },
+  {
+    role: "assistant",
+    content:
+      "わかりました.  マークダウン形式は使用しません。jsonのみを返します",
+  },
+];
+
+const generateBotResponse = async (command, messages) => {
+  switch (command) {
+    case "c_message":
+      return await OllamaWrapper.getResponse([
+        ...defaultSystemMessage,
+        ...messages,
+      ]);
+    case "c_actionstamp":
+      const num_retry = 5;
+      for (let i = 0; i < num_retry; i++) {
+        const response = await OllamaWrapper.getResponse(
+          [...actionstampSystemMsg, messages[messages.length - 1]],
+          (options = {
+            num_predict: 256,
+            temperature: 0.2,
+          })
+        );
+        try {
+          return JSON.parse(response.split("```")[1].replace("json", ""));
+        } catch (e) {
+          console.log("actionstamp parse error:", e);
+          continue;
+        }
+      }
+    default:
+      return undefined;
+  }
+};
+
+module.exports = {
+  generateBotResponse,
+};

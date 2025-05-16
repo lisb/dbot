@@ -7,7 +7,8 @@
 //   time - Reply with current time
 "use strict";
 
-const { OllamaWrapper } = require("./ollama_wrapper");
+const { generateCommand } = require("./command_master");
+const { generateBotResponse } = require("./bot");
 
 const g_messages = [];
 
@@ -16,19 +17,37 @@ module.exports = (robot) => {
     // この部分
     res.send(`This room id is ${res.message.room}`);
   });
-  robot.respond(/(.*)/, (res) => {
-    // console.log(res);
-    const message = { role: "user", content: res.match[1] };
+  robot.hear(/(.*)/, (res) => {
+    const message = {
+      role: "user",
+      content: res.message.text.replace("Hubot ", ""),
+    };
     g_messages.push(message);
-    OllamaWrapper.getResponse(g_messages)
-      .then((response) => {
+  });
+  robot.respond(/(.*)/, async (res) => {
+    console.log(res.message.text);
+    const message = {
+      role: "user",
+      content: res.message.text.replace("Hubot ", ""),
+    };
+    g_messages.push(message);
+    const commandResponse = await generateCommand([message]);
+    const commandList = commandResponse.command;
+    for (let i = 0; i < commandList.length; i++) {
+      const command = commandList[i];
+      generateBotResponse(command, [message]).then((response) => {
+        if (!response) {
+          return;
+        }
+        if (command === "c_message") {
+          g_messages.push({
+            role: "assistant",
+            content: response,
+          });
+        }
         res.send(response);
-        g_messages.push({ role: "assistant", content: response });
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        res.send("An error occurred while processing your request.");
       });
+    }
   });
   robot.respond(/PING$/i, (res) => {
     res.send("PONG");

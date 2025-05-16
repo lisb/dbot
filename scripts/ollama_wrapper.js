@@ -12,15 +12,18 @@ const defaultSystemMessage = {
 };
 
 class OllamaWrapper {
-  static getResponse = async (messages) => {
+  static getResponse = async (
+    messages,
+    options = {
+      num_predict: 256,
+      frequency_penalty: 2.0,
+      presence_penalty: 2.0,
+    }
+  ) => {
     const res = await ollama.default.chat({
       model: "gemma3:latest",
-      messages: [defaultSystemMessage, ...messages],
-      options: {
-        num_predict: 256,
-        frequency_penalty: 2.0,
-        presence_penalty: 2.0,
-      },
+      messages: [...messages],
+      options,
     });
     console.log("Ollama response:", res.message.content);
     return res.message.content;
@@ -28,5 +31,6 @@ class OllamaWrapper {
 }
 
 module.exports = {
+  defaultSystemMessage,
   OllamaWrapper,
 };
