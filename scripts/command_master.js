@@ -21,6 +21,8 @@ instruct = `
 ユーザー： AかBかCどれがいいか聞いて
 {"command": ["c_actionstamp"]}
 例4(組み合わせもあり):
+{"command": ["c_message", "c_messsage"]}
+例5(組み合わせもあり):
 {"command": ["c_message", "c_actionstamp"]}
 `;
 
@@ -35,7 +37,7 @@ const defaultSystemMessage = [
 const generateCommand = async (messages, numContinue = 5) => {
   for (let i = 0; i < numContinue; i++) {
     const res = await OllamaWrapper.getResponse(
-      [...defaultSystemMessage, ...messages],
+      [...defaultSystemMessage, messages[messages.length - 1]],
       { temperature: 0.1 }
     );
     console.log("commander response:", res);

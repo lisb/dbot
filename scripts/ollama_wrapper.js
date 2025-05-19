@@ -21,7 +21,7 @@ class OllamaWrapper {
     }
   ) => {
     const res = await ollama.default.chat({
-      model: "gemma3:latest",
+      model: "gemma3:12b",
       messages: [...messages],
       options,
     });
