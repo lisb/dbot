@@ -13,8 +13,8 @@ const defaultActionStampInstruction = `
 
 送信したYes/Noスタンプは締め切ることができます。
 
-{
-  "close_yesno": sent.message.id
+{  
+  "close_yesno": // in_reply_toに格納されているメッセージのIDを指定する
 }
 ※ sent.message.id については「メッセージの送信完了」を参照してください。
 
@@ -29,8 +29,8 @@ const defaultActionStampInstruction = `
 
 送信したセレクトスタンプは締め切ることができます。
 
-{
-  "close_select": sent.message.id
+{    
+  "close_select": // in_reply_toに格納されているメッセージのIDを指定する
 }
 ※ sent.message.id については「メッセージの送信完了」を参照してください。
 
@@ -45,7 +45,7 @@ const defaultActionStampInstruction = `
 送信したタスクスタンプは締め切ることができます。
 
 {
-  "close_task": sent.message.id
+  "close_task": // in_reply_toに格納されているメッセージのIDを指定する
 }
 ※ sent.message.id については「メッセージの送信完了」を参照してください。
 `;
