@@ -48,6 +48,7 @@ daab run
 ### Oprtions
 
 edit .env file
+.env.example をコピーして .env にリネームしてください。
 
 ```bash
 HUBOT_DIRECT_TOKEN=xxx // これは自動設定されます
