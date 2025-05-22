@@ -39,11 +39,17 @@ npm install
 
 ### 4. Run the daab
 
+daab 用のアカウントを作って自分の組織に招待してください。
+
 ```bash
 daab login
 
 daab run
 ```
+
+### 5. Let's start a conversation
+
+bot とのペアトークを開始しましょう!
 
 ### Oprtions
 
