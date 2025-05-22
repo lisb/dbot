@@ -32,6 +32,7 @@ const createNote = async (
 ) => {
   const num_retry = 5;
   for (let i = 0; i < num_retry; i++) {
+    // easy reasoning
     const responseReason = await OllamaWrapper.getResponse(
       [messages[messages.length - 1]],
       options
