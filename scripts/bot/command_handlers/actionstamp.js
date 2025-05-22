@@ -1,17 +1,6 @@
-const { OllamaWrapper } = require("./ollama_wrapper");
+const { OllamaWrapper } = require("../../ollama_wrapper");
 
-const instruction = `
-貴方はビジネスチャットアプリのbotです。チャットシステムはマークダウン記法には対応していないので、リッチテキスト形式は使用しません。
-`;
-
-const defaultSystemMessage = [
-  {
-    role: "system",
-    content: instruction,
-  },
-];
-
-const actionStampInstruction = `
+const defaultActionStampInstruction = `
 与えられた要求に合わせて指定されたjson形式のメッセージを返す。必要に応じて締め切る
 
 # Yes/No スタンプ(YesかNoかを選ぶ)
@@ -61,6 +50,9 @@ const actionStampInstruction = `
 ※ sent.message.id については「メッセージの送信完了」を参照してください。
 `;
 
+const actionStampInstruction =
+  process.env.ACTIONSTAMP_INSTRUCTION || defaultActionStampInstruction;
+
 const actionstampSystemMsg = [
   {
     role: "system",
@@ -73,35 +65,28 @@ const actionstampSystemMsg = [
   },
 ];
 
-const generateBotResponse = async (command, messages) => {
-  switch (command) {
-    case "c_message":
-      return await OllamaWrapper.getResponse([
-        ...defaultSystemMessage,
-        ...messages,
-      ]);
-    case "c_actionstamp":
-      const num_retry = 5;
-      for (let i = 0; i < num_retry; i++) {
-        const response = await OllamaWrapper.getResponse(
-          [...actionstampSystemMsg, messages[messages.length - 1]],
-          (options = {
-            num_predict: 256,
-            temperature: 0.2,
-          })
-        );
-        try {
-          return JSON.parse(response.split("```")[1].replace("json", ""));
-        } catch (e) {
-          console.log("actionstamp parse error:", e);
-          continue;
-        }
-      }
-    default:
-      return undefined;
+const createActionStamp = async (
+  messages,
+  options = {
+    num_predict: 256,
+    temperature: 0.2,
+  }
+) => {
+  const num_retry = 5;
+  for (let i = 0; i < num_retry; i++) {
+    const response = await OllamaWrapper.getResponse(
+      [...actionstampSystemMsg, messages[messages.length - 1]],
+      options
+    );
+    try {
+      return JSON.parse(response.split("```")[1].replace("json", ""));
+    } catch (e) {
+      console.log("actionstamp parse error:", e);
+      continue;
+    }
   }
 };
 
 module.exports = {
-  generateBotResponse,
+  createActionStamp,
 };

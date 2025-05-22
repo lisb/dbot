@@ -1,6 +1,6 @@
-const { OllamaWrapper } = require("./ollama_wrapper");
+const { OllamaWrapper } = require("../ollama_wrapper");
 
-instruct = `
+const defaultCommandInstruct = `
 あなたはチャットアプリのボットを制御するコマンドマスターです。
 あなたは、ユーザーからの入力に応じて必要なコマンドを生成し、ボットの挙動を制御します。
 コントロールするボット名は「dbot」です。
@@ -25,6 +25,8 @@ instruct = `
 例5(組み合わせもあり):
 {"command": ["c_message", "c_actionstamp"]}
 `;
+
+const instruct = process.env.COMMAND_INSTRUCTION || defaultCommandInstruct;
 
 const defaultSystemMessage = [
   {

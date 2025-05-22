@@ -7,8 +7,7 @@
 //   time - Reply with current time
 "use strict";
 
-const { generateCommand } = require("./command_master");
-const { generateBotResponse } = require("./bot");
+const { generateBotResponse, generateCommand } = require("./bot");
 
 const g_messages = [];
 
