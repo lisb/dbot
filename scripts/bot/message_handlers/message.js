@@ -1,6 +1,5 @@
 const { generateBotResponse } = require("../command_handlers");
 const { generateCommand } = require("../command_master");
-const { store } = require("../../store");
 
 const messageHandler = async (res, memory) => {
   const message = {

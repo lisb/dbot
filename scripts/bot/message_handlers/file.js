@@ -1,5 +1,4 @@
 const { generateBotResponse } = require("../command_handlers");
-const { store } = require("../../store");
 
 const fileHandler = (res, file, memory) => {
   res.send("ファイルの検証が終わるまで少々お待ちください...");
