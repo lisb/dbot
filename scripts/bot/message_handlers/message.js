@@ -11,7 +11,7 @@ const messageHandler = async (res, memory) => {
   const commandList = commandResponse.command;
   for (let i = 0; i < commandList.length; i++) {
     const command = commandList[i];
-    const response = await generateBotResponse(command, memory);
+    const response = await generateBotResponse(res, command, memory);
     if (!response) {
       return;
     }
