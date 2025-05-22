@@ -52,10 +52,11 @@ const defaultSystemMessage2 = [
 
 const generateCommand = async (messages, numContinue = 5) => {
   for (let i = 0; i < numContinue; i++) {
+    const temperature = 0.1 + i * 0.1;
     // easy reasoning
     const resReason = await OllamaWrapper.getResponse(
       [...defaultSystemMessage, messages[messages.length - 1]],
-      { temperature: 0.1 }
+      { temperature }
     );
     const input = [
       ...defaultSystemMessage,
@@ -63,7 +64,7 @@ const generateCommand = async (messages, numContinue = 5) => {
       { role: "assistant", content: resReason },
       ...defaultSystemMessage2,
     ];
-    const res = await OllamaWrapper.getResponse(input, { temperature: 0.1 });
+    const res = await OllamaWrapper.getResponse(input, { temperature });
     console.log("commander response:", res);
     try {
       const command = JSON.parse(res);
