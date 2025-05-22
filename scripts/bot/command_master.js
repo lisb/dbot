@@ -67,8 +67,8 @@ const generateCommand = async (messages, numContinue = 5) => {
     console.log("commander response:", res);
     try {
       const command = JSON.parse(res);
-      if (typeof command.command === Array) {
-        console.log("command is undefined");
+      if (!Array.isArray(command.command)) {
+        console.log("command is not an array");
         continue;
       }
       return command;
