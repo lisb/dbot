@@ -1,15 +1,7 @@
 "use strict";
 const ollama = require("ollama");
 
-const instruction = `
-貴方はビジネスチャットアプリのbotです。チャットシステムはマークダウン記法には対応していないので、リッチテキスト形式は使用しません。
-チャットアプリなので長文ではなく短文で返答してください。
-`;
-
-const defaultSystemMessage = {
-  role: "system",
-  content: instruction,
-};
+const model = process.env.OLLAMA_MODEL || "gemma3:4b";
 
 class OllamaWrapper {
   static getResponse = async (
@@ -21,7 +13,7 @@ class OllamaWrapper {
     }
   ) => {
     const res = await ollama.default.chat({
-      model: "gemma3:12b",
+      model: model,
       messages: [...messages],
       options,
     });
@@ -31,6 +23,5 @@ class OllamaWrapper {
 }
 
 module.exports = {
-  defaultSystemMessage,
   OllamaWrapper,
 };
