@@ -1,7 +1,6 @@
-const { generateBotResponse } = require("./command_handlers");
-const { generateCommand } = require("./command_master");
+const { messageHandler, fileHandler } = require("./message_handlers");
 
 module.exports = {
-  generateBotResponse,
-  generateCommand,
+  messageHandler,
+  fileHandler,
 };
