@@ -1,21 +1,24 @@
 const { generateBotResponse } = require("../command_handlers");
 const { generateCommand } = require("../command_master");
 
-const messageHandler = async (res, memory) => {
+const messageHandler = async (res, memoryState) => {
   const message = {
     role: "user",
     content: res.message.text.replace("Hubot ", ""),
   };
-  memory.push(message);
   const commandResponse = await generateCommand([message]);
   const commandList = commandResponse.command;
   for (let i = 0; i < commandList.length; i++) {
     const command = commandList[i];
-    const response = await generateBotResponse(res, command, memory);
+    const response = await generateBotResponse(res, command, [
+      ...memoryState,
+      message,
+    ]);
     if (!response) {
       return;
     }
-    memory.push({
+    memoryState.push(message);
+    memoryState.push({
       role: "assistant",
       content: response,
     });

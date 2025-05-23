@@ -1,6 +1,6 @@
 const { generateBotResponse } = require("../command_handlers");
 
-const fileHandler = (res, file, memory) => {
+const fileHandler = (res, file, memoryState) => {
   res.send("ファイルの検証が終わるまで少々お待ちください...");
   const dl = () => {
     res.download(file, async (path, err) => {
@@ -15,12 +15,15 @@ const fileHandler = (res, file, memory) => {
         images: [path],
       };
       const command = "c_message";
-      const response = await generateBotResponse(command, [...memory, message]);
+      const response = await generateBotResponse(command, [
+        ...memoryState,
+        message,
+      ]);
       if (!response) {
         return;
       }
-      memory.push({ role: "user", content: message.content }); // NOTE: 画像データはメモリーしない
-      memory.push({
+      memoryState.push({ role: "user", content: message.content }); // NOTE: 画像データはメモリーしない
+      memoryState.push({
         role: "assistant",
         content: response,
       });
