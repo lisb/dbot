@@ -9,6 +9,9 @@ const fileHandler = (res, file, memoryState) => {
         setTimeout(dl, 30000);
       }
       console.log("succeed2:" + path);
+      if (!path) {
+        setTimeout(dl, 1000);
+      }
       const message = {
         role: "user",
         content: res.json.text ? res.json.text.replace("Hubot ", "") : "",
