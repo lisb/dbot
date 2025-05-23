@@ -12,7 +12,7 @@ const defaultNoteInstruction = `
 
 const noteInstruction = process.env.NOTE_INSTRUCTION || defaultNoteInstruction;
 
-const actionstampSystemMsg = [
+const noteSystemMsg = [
   {
     role: "system",
     content: noteInstruction,
@@ -41,7 +41,7 @@ const createNote = async (
       [
         messages[messages.length - 1],
         { role: "assistant", content: responseReason },
-        ...actionstampSystemMsg,
+        ...noteSystemMsg,
       ],
       {
         num_predict: 1024,
