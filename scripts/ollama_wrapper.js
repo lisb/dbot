@@ -2,6 +2,7 @@
 const ollama = require("ollama");
 
 const model = process.env.OLLAMA_MODEL || "gemma3:4b";
+const needLog = process.env.OLLAMA_LOG || false;
 
 class OllamaWrapper {
   static getResponse = async (
@@ -17,7 +18,9 @@ class OllamaWrapper {
       messages: [...messages],
       options,
     });
-    console.log("Ollama response:", res.message.content);
+    if (needLog) {
+      console.log("Ollama response:", res.message.content);
+    }
     return res.message.content;
   };
 }
