@@ -72,7 +72,11 @@ const generateCommand = async (messages, numContinue = 5) => {
     const response = await OllamaWrapper.getResponse(input, { temperature });
     console.log("commander response:", response);
     try {
-      const command = JSON.parse(response.split("```")[1].replace("json", ""));
+      let commandStr = response;
+      if (response.includes("```")) {
+        commandStr = response.split("```")[1].replace(/^json\s*/, "");
+      }
+      const command = JSON.parse(commandStr);
       if (!Array.isArray(command.command)) {
         console.log("command is not an array");
         continue;

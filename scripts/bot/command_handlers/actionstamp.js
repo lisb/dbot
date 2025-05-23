@@ -79,7 +79,11 @@ const createActionStamp = async (
       options
     );
     try {
-      return JSON.parse(response.split("```")[1].replace("json", ""));
+      let responseStr = response;
+      if (response.includes("```")) {
+        responseStr = response.split("```")[1].replace(/^json\s*/, "");
+      }
+      return JSON.parse(responseStr);
     } catch (e) {
       console.log("actionstamp parse error:", e);
       continue;
