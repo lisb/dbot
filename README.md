@@ -8,6 +8,8 @@
 
 Direct を使いこなすマルチモーダル AI アシスタント
 
+ローカルで動きます。
+
 下記の機能を利用可能です。
 
 - メッセージ応答
@@ -20,6 +22,8 @@ Direct を使いこなすマルチモーダル AI アシスタント
 daab が installed されていることを前提としています。
 
 ### 1. Install Ollama
+
+Ollama とはローカルで LLM を動かすためのツールです。
 
 ### 2. Install Ollama model
 
@@ -57,9 +61,12 @@ edit .env file
 .env.example をコピーして .env にリネームしてください。
 
 ```bash
-HUBOT_DIRECT_TOKEN=xxx // これは自動設定されます
-OLLAMA_MODEL=gemma3:12b // gemma3:4b or gemma3:12b or gemma3:27b  性能が許す限り マルチモーダルモデルがおすすめ
-DEFAULT_INSTRUCTION=お嬢様言葉で返答する // なくても動くきます。お好きなように
+// これは自動設定されます
+HUBOT_DIRECT_TOKEN=xxx
+// gemma3:4b or gemma3:12b or gemma3:27b  PCのメモリが許す限り大きなものを選択可能 マルチモーダルモデルがおすすめ gemma以外でも大丈夫
+OLLAMA_MODEL=gemma3:12b
+// なくても動くきます。お好きなように
+DEFAULT_INSTRUCTION=お嬢様言葉で返答する
 ```
 
 ## 使い方
