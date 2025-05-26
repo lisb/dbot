@@ -7,18 +7,16 @@ const fileHandler = (res, file, memoryState) => {
       if (err) {
         console.log("failed2:" + err.message);
         setTimeout(dl, 30000);
+        return;
       }
       console.log("succeed2:" + path);
-      if (!path) {
-        setTimeout(dl, 1000);
-      }
       const message = {
         role: "user",
         content: res.json.text ? res.json.text.replace("Hubot ", "") : "",
         images: [path],
       };
       const command = "c_message";
-      const response = await generateBotResponse(command, [
+      const response = await generateBotResponse(res, command, [
         ...memoryState,
         message,
       ]);
