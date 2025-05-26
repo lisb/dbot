@@ -1,4 +1,5 @@
 const { OllamaWrapper } = require("../../ollama_wrapper");
+const { extractJSON } = require("../utils");
 
 const defaultNoteInstruction = `
 思考の結果をもとに、ノートにまとめる。
@@ -31,12 +32,12 @@ const createNote = async (
   }
 ) => {
   const num_retry = 5;
+  // easy reasoning
+  const responseReason = await OllamaWrapper.getResponse(
+    [messages[messages.length - 1]],
+    options
+  );
   for (let i = 0; i < num_retry; i++) {
-    // easy reasoning
-    const responseReason = await OllamaWrapper.getResponse(
-      [messages[messages.length - 1]],
-      options
-    );
     const response = await OllamaWrapper.getResponse(
       [
         messages[messages.length - 1],
@@ -49,7 +50,17 @@ const createNote = async (
       }
     );
     try {
-      return JSON.parse(response.split("```")[1].replace("json", ""));
+      let note = extractJSON(response);
+      if (!note) {
+        console.log("note not found in response");
+        // 末尾対策
+        note = extractJSON(response + '"}');
+        if (!note) {
+          console.log("note not found in responseReason");
+          continue;
+        }
+      }
+      return JSON.parse(note);
     } catch (e) {
       console.log("actionstamp parse error:", e);
       continue;

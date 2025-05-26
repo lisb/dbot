@@ -1,4 +1,5 @@
 const { OllamaWrapper } = require("../../ollama_wrapper");
+const { extractJSON } = require("../utils");
 
 const defaultActionStampInstruction = `
 与えられた要求に合わせて指定されたjson形式のメッセージを返す。必要に応じて締め切る
@@ -79,9 +80,10 @@ const createActionStamp = async (
       options
     );
     try {
-      let responseStr = response;
-      if (response.includes("```")) {
-        responseStr = response.split("```")[1].replace(/^json\s*/, "");
+      let responseStr = extractJSON(response);
+      if (!responseStr) {
+        console.log("actionstamp parse error: no JSON found in response");
+        continue;
       }
       return JSON.parse(responseStr);
     } catch (e) {

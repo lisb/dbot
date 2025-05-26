@@ -1,4 +1,5 @@
 const { OllamaWrapper } = require("../ollama_wrapper");
+const { extractJSON } = require("./utils");
 
 const defaultCommandInstruct = `
 あなたはチャットアプリのボットを制御するコマンドマスターです。
@@ -72,9 +73,10 @@ const generateCommand = async (messages, numContinue = 5) => {
     const response = await OllamaWrapper.getResponse(input, { temperature });
     console.log("commander response:", response);
     try {
-      let commandStr = response;
-      if (response.includes("```")) {
-        commandStr = response.split("```")[1].replace(/^json\s*/, "");
+      let commandStr = extractJSON(response);
+      if (!commandStr) {
+        console.log("command not found in response");
+        continue;
       }
       const command = JSON.parse(commandStr);
       if (!Array.isArray(command.command)) {
