@@ -69,6 +69,17 @@ OLLAMA_MODEL=gemma3:12b
 DEFAULT_INSTRUCTION=お嬢様言葉で返答する
 ```
 
+おすすめモデル(2025 年 5 月時点)
+
+- gemma3:4b(デフォルト)
+  - gemma3:12b よりも性能が劣りますが、比較的低負荷で高速です
+- gemma3:12b
+  - gemma3:4b だと性能不足で direct の機能を十分に活用できません。
+  - メモリ 16GB 以上がお勧めです。
+- gemma3:27b
+  - god mode
+  - gemma3:12b よりもさらに高性能ですが、メモリ 32GB 以上が必要です。
+
 ## 使い方
 
 ### 1. メッセージ応答
