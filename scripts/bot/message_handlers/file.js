@@ -32,7 +32,8 @@ const fileHandler = (res, file, memoryState) => {
       res.send(response);
     });
   };
-  setTimeout(dl, 30000);
+  // ファイル検証中が出る環境は特定の環境のみ
+  setTimeout(dl, 0);
 };
 
 module.exports = {
