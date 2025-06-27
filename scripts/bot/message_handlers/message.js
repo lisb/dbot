@@ -18,9 +18,11 @@ const messageHandler = async (res, memoryState) => {
       return;
     }
     memoryState.push(message);
+    const responseString =
+      typeof response === "object" ? JSON.stringify(response) : response;
     memoryState.push({
       role: "assistant",
-      content: response,
+      content: responseString,
     });
 
     res.send(response);
