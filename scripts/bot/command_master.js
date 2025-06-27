@@ -11,21 +11,20 @@ const commonInstruction = `
 - c_actionstamp : チャットアプリの機能で他のユーザーに対しアンケートを作成できる。これをアクションスタンプという。アンケートには次の種類があるYes/No質問・Select質問・ToDo質問
 - c_reply_actionstamp : アクションスタンプの回答に対して返答する("in_reply_to"がある場合)
 - c_note: ノートを作成する（メッセージよりも長い文が書ける）
-`
+`;
 
 const defaultCommandInstruct = `
 ${commonInstruction}
 
-次にどのようなアクションをするべきかを簡潔に考えます。
-これはユーザーには表示されず、あなたの内部的な思考です。
-**思考は箇条書きで、コマンド名やコードブロックを含まず、純粋な思考プロセスのみを記述してください。**
-**注: 内容自体は別のシステムが担当します。あなたはただコマンドを生成するのみです。**
+ユーザー入力に対する次のアクションを考えます。これは内部思考であり、ユーザーには表示されません。
 
-思考の例：
-- ユーザーは挨拶をしている。メッセージを返すべきか？
-- ユーザーはアンケートを作成したいようだ。c_actionstampを使うべきか？
-- ユーザーはアクションスタンプに返答している。c_reply_actionstampを使うべきか？
-- ユーザーは長い文章を作成したいようだ。c_noteを使うべきか？
+**出力は箇条書きの純粋な思考プロセスのみです。コマンド名、コードブロック、または具体的なコンテンツ（例: メッセージの内容、アンケートの内容、ノートの内容）は絶対に含めないでください。**
+
+思考例:
+- ユーザーは挨拶している。c_messageを選択すべき。
+- ユーザーはアンケートを作りたい。c_actionstampを選択すべき。
+- ユーザーはアクションスタンプに返答している。c_reply_actionstampを選択すべき。
+- ユーザーは長文作成を求めている。c_noteを選択すべき。**この場合、ノートの具体的な内容は別のプロセスが生成するため、ここでは出力しない。**
 `;
 
 const defaultCommandInstruct2 = `
@@ -90,19 +89,30 @@ const generateCommand = async (messages, numContinue = 5) => {
     const temperature = 0.1 + i * 0.1;
     // easy reasoning
     const resReason = await OllamaWrapper.getResponse(
-      [...defaultSystemMessage, messages[messages.length - 1]],
+      [
+        ...defaultSystemMessage,
+        messages[messages.length - 1],
+        {
+          role: "assistant",
+          content: "まずは何をするべきか考えます。 ",
+        },
+      ],
       { temperature }
     );
     const input = [
       ...defaultSystemMessage2,
       {
         role: "user",
-        content: `ユーザー: ${messages[messages.length - 1].content}` // ユーザーからのメッセージとして明確に渡す
+        content: `ユーザー: ${messages[messages.length - 1].content}`, // ユーザーからのメッセージとして明確に渡す
       },
       {
         role: "assistant",
-        content: `思考: ${resReason}` // モデルの思考として明確に渡す
-      }
+        content: `思考: ${resReason}`, // モデルの思考として明確に渡す
+      },
+      {
+        role: "assistant",
+        content: "コマンドを生成します。",
+      },
     ];
     const response = await OllamaWrapper.getResponse(input, { temperature });
     console.log("commander response:", response);

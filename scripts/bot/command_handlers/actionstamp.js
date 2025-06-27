@@ -59,11 +59,6 @@ const actionstampSystemMsg = [
     role: "system",
     content: actionStampInstruction,
   },
-  {
-    role: "assistant",
-    content:
-      "わかりました.  マークダウン形式は使用しません。jsonのみを返します",
-  },
 ];
 
 const createActionStamp = async (
@@ -76,7 +71,15 @@ const createActionStamp = async (
   const num_retry = 5;
   for (let i = 0; i < num_retry; i++) {
     const response = await OllamaWrapper.getResponse(
-      [...actionstampSystemMsg, messages[messages.length - 1]],
+      [
+        ...actionstampSystemMsg,
+        messages[messages.length - 1],
+        {
+          role: "assistant",
+          content:
+            "フォーマットに従ってjsonを生成します。",
+        },
+      ],
       options
     );
     try {

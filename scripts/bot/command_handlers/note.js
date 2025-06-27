@@ -52,7 +52,14 @@ const createNote = async (
   const num_retry = 5;
   // easy reasoning
   const responseReason = await OllamaWrapper.getResponse(
-    [...noteReasonSystemMsg, messages[messages.length - 1]],
+    [
+      ...noteReasonSystemMsg,
+      messages[messages.length - 1],
+      {
+        role: "assistant",
+        content: `まず、ノートのタイトルと内容を生成するための思考を行います`,
+      },
+    ],
     options
   );
 
@@ -62,6 +69,10 @@ const createNote = async (
         ...noteSystemMsg,
         messages[messages.length - 1],
         { role: "assistant", content: `思考:\n${responseReason}` },
+        {
+          role: "assistant",
+          content: `次に、指定のjson形式でノートを生成します。`,
+        },
       ],
       {
         num_predict: 1024,
