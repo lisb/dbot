@@ -29,12 +29,12 @@ const defaultCommandInstruct2 = `
 ユーザー： AかBかCどれがいいか聞いて
 {"command": ["c_actionstamp"]}
 例4(組み合わせもあり):
-{"command": ["c_message", "c_messsage"]}
+{"command": ["c_message", "c_message"]}
 例5(組み合わせもあり):
 {"command": ["c_message", "c_actionstamp"]}
 例6:
 // メッセージ: {"in_reply_to":"_394679468_-2105540608","response":0,"question":"晩御飯何がいい？","options":["カレー","ハンバーグ","ラーメン","パスタ","その他"],"listing":false,"closing_type":0}
-{"command": ["c_reply_atctionstamp]}
+{"command": ["c_reply_actionstamp"]}
 例７:
 ユーザー: ○○についてまとめて
 {"command": ["c_note"]}
