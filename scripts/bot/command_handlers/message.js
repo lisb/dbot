@@ -14,10 +14,11 @@ const defaultSystemMessage = [
 ];
 
 const generateMessage = async (messages, options) => {
-  return await OllamaWrapper.getResponse(
+  const response = await OllamaWrapper.getResponse(
     [...defaultSystemMessage, ...messages],
     options
   );
+  return response.trim();
 };
 
 module.exports = {
