@@ -19,7 +19,7 @@ Direct を使いこなすマルチモーダル AI アシスタント
 
 ## Get started
 
-daab が installed されていることを前提としています。
+daab が install されていることを前提としています。
 
 ### 1. Install Ollama
 
