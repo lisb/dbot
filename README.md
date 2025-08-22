@@ -6,7 +6,7 @@
 
 ## Overview
 
-Direct を使いこなすマルチモーダル AI アシスタント
+「[direct](https://direct4b.com/ja/)」 を使いこなすマルチモーダル AI アシスタント
 
 ローカルで動きます。
 
