@@ -64,7 +64,7 @@ edit .env file
 // これは自動設定されます
 HUBOT_DIRECT_TOKEN=xxx
 // gemma3:4b or gemma3:12b or gemma3:27b  PCのメモリが許す限り大きなものを選択可能 マルチモーダルモデルがおすすめ gemma以外でも大丈夫
-OLLAMA_MODEL=gemma3:12b
+OLLAMA_MODEL=gemma3:4b
 // なくても動くきます。お好きなように
 DEFAULT_INSTRUCTION=お嬢様言葉で返答する
 ```
